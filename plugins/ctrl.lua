@@ -1,3 +1,13 @@
+local function reload_plugins( )
+	plugins = {}
+  return load_plugins()
+end
+function run_bash(command)
+    local cmd = io.popen(command)
+    local result = cmd:read('*all')
+    cmd:close()
+    return result
+end
 local function is_channel_disabled( receiver )
 	if not _config.disabled_channels then
 		return false
@@ -16,29 +26,29 @@ local function enable_channel(receiver, to_id)
 	end
 
 	if _config.disabled_channels[receiver] == nil then
-		return lang_text(to_id, 'botOn')..''
+		return 'selfbot=✅'
 	end
-	
+
 	_config.disabled_channels[receiver] = false
 
 	save_config()
-	return lang_text(to_id, 'botOn')..''
+	return 'selfbot=✅'
 end
 
 local function disable_channel(receiver, to_id)
 	if not _config.disabled_channels then
 		_config.disabled_channels = {}
 	end
-	
+
 	_config.disabled_channels[receiver] = true
 
 	save_config()
-	return lang_text(to_id, 'botOff')..' '
+	return 'selfbot=❌'
 end
 
 local function pre_process(msg)
 	local receiver = get_receiver(msg)
-	
+
 	-- If sender is sudo then re-enable the channel
 	if is_sudo(msg) then
 	  if msg.text == "#bot on" then
@@ -65,14 +75,36 @@ local function run(msg, matches)
 			return disable_channel(receiver, msg.to.id)
 		end
 	else
-		return '🚫 '..lang_text(msg.to.id, 'require_sudo')
+		return
+	end
+	    if matches[1] == 'up' then
+  if not is_sudo(msg) then
+    return nil
+  end
+  local receiver = get_receiver(msg)
+ if string.match then
+     local command = 'git pull'
+   text = run_bash(command)
+   local text = text..'Updates were applied GitHub\nself2'
+    return text
+  end
+end
+	if matches[1] == 'rl' and is_sudo(msg) then
+		receiver = get_receiver(msg)
+		reload_plugins(true)
+		post_msg(receiver, "Reloaded!", ok_cb, false)
+		return "All plugins reloaded!"
 	end
 end
 
 return {
 	patterns = {
-		"^#bot? (on)",
-		"^#bot? (off)" }, 
+	    "^#bot? (on)$",
+            "^#bot? (off)$",
+	    "^#bot? (up)$",
+	    "^#bot (rl)$",
+	    },
 	run = run,
 	pre_process = pre_process
 }
+
