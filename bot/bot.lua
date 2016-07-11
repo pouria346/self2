@@ -238,6 +238,10 @@ function create_config( )
      "love",
      "share",
      "spammer",
+     "joy",
+     "xxx",
+     "group",
+     "chat"
      },
     sudo_users = {227841514},
     admin_users = {},
