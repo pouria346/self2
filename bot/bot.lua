@@ -241,6 +241,7 @@ function create_config( )
      "joy",
      "xxx",
      "group",
+     "getplug",
      "chat"
      },
     sudo_users = {227841514},
