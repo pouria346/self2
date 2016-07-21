@@ -19,8 +19,8 @@ return {
   patterns = {
   "^سلام$",
   "^رباتی$",
-  "^پوریا$",
-  "^پوری$"
+  "پوریا",
+  "پوری"
     }, 
   run = run,
   pre_process = pre_process
